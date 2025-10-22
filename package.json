@@ -12,7 +12,10 @@
     "start": "node dist/app.js",
     "dev": "tsx watch src/app.ts",
     "dev:nodemon": "nodemon --exec tsx src/app.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install",
+    "lint": "tsc --noEmit",
+    "lint:fix": "tsc --noEmit"
   },
   "keywords": [
     "mobile-app",
@@ -57,8 +60,16 @@
     "@types/morgan": "^1.9.9",
     "@types/node": "^20.10.5",
     "@types/nodemon": "^1.19.5",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.5",
     "nodemon": "^3.0.2",
     "tsx": "^4.6.2",
     "typescript": "^5.3.3"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "tsc --noEmit",
+      "git add"
+    ]
   }
 }
