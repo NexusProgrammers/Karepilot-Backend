@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { mobileUserService } from "../services/index";
-import { uploadSingleImage } from "../middlewares/upload";
 
 export const registerMobileUser = async (req: Request, res: Response): Promise<void> => {
   try {

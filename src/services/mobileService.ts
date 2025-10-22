@@ -2,17 +2,7 @@ import MobileUser from '../models/mobileUser';
 import { generateToken } from '../utils/index';
 import { emailService } from './index';
 import { uploadImage, deleteImage, extractPublicIdFromUrl } from './imageService';
-import {
-  CreateMobileUserData,
-  UpdateMobileUserData,
-  MobileUserQuery,
-  MobileUserResult,
-  MobileUsersListResult,
-  EmailVerificationData,
-  VerificationResponse,
-  MobileUserStatus,
-  IMobileUser
-} from '../types/index';
+import { CreateMobileUserData, UpdateMobileUserData, MobileUserQuery, MobileUserResult, MobileUsersListResult, EmailVerificationData, VerificationResponse, MobileUserStatus, IMobileUser } from '../types/mobileTypes';
 
 export class MobileUserService {
   async createMobileUser(data: CreateMobileUserData): Promise<MobileUserResult> {

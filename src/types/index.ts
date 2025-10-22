@@ -1,3 +1,7 @@
-export * from './adminTypes';
-export * from './mobileTypes';
-export * from './commonTypes';
+export * from "./adminTypes";
+export {
+  EmailOptions as MobileEmailOptions,
+  EmailPasswordResetTemplate as MobileEmailPasswordResetTemplate,
+  EmailVerificationTemplate as MobileEmailVerificationTemplate,
+} from "./mobileTypes";
+export * from "./commonTypes";
