@@ -2,14 +2,14 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/app.js",
+  "main": "dist/app.ts",
   "type": "module",
   "engines": {
     "node": "22.x"
   },
   "scripts": {
     "build": "tsup src/app.ts --format esm --outDir dist",
-    "start": "node dist/app.js",
+    "start": "node dist/app.",
     "dev": "tsx watch src/app.ts",
     "dev:nodemon": "nodemon --exec tsx src/app.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
