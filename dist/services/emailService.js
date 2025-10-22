@@ -1,16 +1,22 @@
-import nodemailer from "nodemailer";
-import { emailConfig, validateEmailConfig } from "../config/emailConfig";
-export class EmailService {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.EmailService = void 0;
+const nodemailer_1 = __importDefault(require("nodemailer"));
+const emailConfig_1 = require("../config/emailConfig");
+class EmailService {
     transporter;
     constructor() {
-        if (!validateEmailConfig()) {
+        if (!(0, emailConfig_1.validateEmailConfig)()) {
             throw new Error("Email configuration is invalid. Please check your environment variables.");
         }
-        this.transporter = nodemailer.createTransport({
+        this.transporter = nodemailer_1.default.createTransport({
             service: "gmail",
             auth: {
-                user: emailConfig.gmail.user,
-                pass: emailConfig.gmail.appPassword,
+                user: emailConfig_1.emailConfig.gmail.user,
+                pass: emailConfig_1.emailConfig.gmail.appPassword,
             },
         });
     }
@@ -331,7 +337,7 @@ export class EmailService {
         try {
             const mailOptions = {
                 to: email,
-                subject: emailConfig.templates.verification.subject,
+                subject: emailConfig_1.emailConfig.templates.verification.subject,
                 html: this.generateEmailVerificationHTML(data),
                 text: this.generateEmailVerificationText(data),
             };
@@ -348,7 +354,7 @@ export class EmailService {
         try {
             const mailOptions = {
                 to: email,
-                subject: emailConfig.templates.passwordReset.subject,
+                subject: emailConfig_1.emailConfig.templates.passwordReset.subject,
                 html: this.generatePasswordResetHTML(data),
                 text: this.generatePasswordResetText(data),
             };
@@ -686,5 +692,6 @@ export class EmailService {
         }
     }
 }
-export default new EmailService();
+exports.EmailService = EmailService;
+exports.default = new EmailService();
 //# sourceMappingURL=emailService.js.map

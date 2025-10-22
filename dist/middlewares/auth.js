@@ -1,7 +1,13 @@
-import AdminUser from "../models/adminUser";
-import MobileUser from "../models/mobileUser";
-import { verifyToken } from "../utils/auth";
-export const authenticateAdmin = async (req, res, next) => {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.optionalAuth = exports.requireRole = exports.requireAllPermissions = exports.requireAnyPermission = exports.requirePermission = exports.authenticate = exports.authenticateMobile = exports.authenticateAdmin = void 0;
+const adminUser_1 = __importDefault(require("../models/adminUser"));
+const mobileUser_1 = __importDefault(require("../models/mobileUser"));
+const auth_1 = require("../utils/auth");
+const authenticateAdmin = async (req, res, next) => {
     try {
         const token = req.header("Authorization")?.replace("Bearer ", "");
         if (!token) {
@@ -11,8 +17,8 @@ export const authenticateAdmin = async (req, res, next) => {
             });
             return;
         }
-        const decoded = verifyToken(token);
-        const user = await AdminUser.findById(decoded.userId).select("-password");
+        const decoded = (0, auth_1.verifyToken)(token);
+        const user = await adminUser_1.default.findById(decoded.userId).select("-password");
         if (!user || !user.isActive) {
             res.status(401).json({
                 success: false,
@@ -31,7 +37,8 @@ export const authenticateAdmin = async (req, res, next) => {
         });
     }
 };
-export const authenticateMobile = async (req, res, next) => {
+exports.authenticateAdmin = authenticateAdmin;
+const authenticateMobile = async (req, res, next) => {
     try {
         const token = req.header("Authorization")?.replace("Bearer ", "");
         if (!token) {
@@ -41,8 +48,8 @@ export const authenticateMobile = async (req, res, next) => {
             });
             return;
         }
-        const decoded = verifyToken(token);
-        const user = await MobileUser.findById(decoded.userId).select("-password");
+        const decoded = (0, auth_1.verifyToken)(token);
+        const user = await mobileUser_1.default.findById(decoded.userId).select("-password");
         if (!user) {
             res.status(401).json({
                 success: false,
@@ -61,7 +68,8 @@ export const authenticateMobile = async (req, res, next) => {
         });
     }
 };
-export const authenticate = async (req, res, next) => {
+exports.authenticateMobile = authenticateMobile;
+const authenticate = async (req, res, next) => {
     try {
         const token = req.header("Authorization")?.replace("Bearer ", "");
         if (!token) {
@@ -70,14 +78,14 @@ export const authenticate = async (req, res, next) => {
                 message: "Access denied. No token provided.",
             });
         }
-        const decoded = verifyToken(token);
-        let user = await AdminUser.findById(decoded.userId).select("-password");
+        const decoded = (0, auth_1.verifyToken)(token);
+        let user = await adminUser_1.default.findById(decoded.userId).select("-password");
         if (user && user.isActive) {
             req.user = user;
             req.userType = "admin";
             return next();
         }
-        user = await MobileUser.findById(decoded.userId).select("-password");
+        user = await mobileUser_1.default.findById(decoded.userId).select("-password");
         if (user) {
             req.user = user;
             req.userType = "mobile";
@@ -95,7 +103,8 @@ export const authenticate = async (req, res, next) => {
         });
     }
 };
-export const requirePermission = (permission) => {
+exports.authenticate = authenticate;
+const requirePermission = (permission) => {
     return (req, res, next) => {
         if (!req.user || req.userType !== "admin") {
             res.status(401).json({
@@ -115,7 +124,8 @@ export const requirePermission = (permission) => {
         next();
     };
 };
-export const requireAnyPermission = (permissions) => {
+exports.requirePermission = requirePermission;
+const requireAnyPermission = (permissions) => {
     return (req, res, next) => {
         if (!req.user || req.userType !== "admin") {
             res.status(401).json({
@@ -135,7 +145,8 @@ export const requireAnyPermission = (permissions) => {
         next();
     };
 };
-export const requireAllPermissions = (permissions) => {
+exports.requireAnyPermission = requireAnyPermission;
+const requireAllPermissions = (permissions) => {
     return (req, res, next) => {
         if (!req.user || req.userType !== "admin") {
             res.status(401).json({
@@ -155,7 +166,8 @@ export const requireAllPermissions = (permissions) => {
         next();
     };
 };
-export const requireRole = (roles) => {
+exports.requireAllPermissions = requireAllPermissions;
+const requireRole = (roles) => {
     return (req, res, next) => {
         if (!req.user || req.userType !== "admin") {
             res.status(401).json({
@@ -175,18 +187,19 @@ export const requireRole = (roles) => {
         next();
     };
 };
-export const optionalAuth = async (req, res, next) => {
+exports.requireRole = requireRole;
+const optionalAuth = async (req, res, next) => {
     try {
         const token = req.header("Authorization")?.replace("Bearer ", "");
         if (token) {
-            const decoded = verifyToken(token);
-            let user = await AdminUser.findById(decoded.userId).select("-password");
+            const decoded = (0, auth_1.verifyToken)(token);
+            let user = await adminUser_1.default.findById(decoded.userId).select("-password");
             if (user && user.isActive) {
                 req.user = user;
                 req.userType = "admin";
                 return next();
             }
-            user = await MobileUser.findById(decoded.userId).select("-password");
+            user = await mobileUser_1.default.findById(decoded.userId).select("-password");
             if (user) {
                 req.user = user;
                 req.userType = "mobile";
@@ -199,4 +212,5 @@ export const optionalAuth = async (req, res, next) => {
         next();
     }
 };
+exports.optionalAuth = optionalAuth;
 //# sourceMappingURL=auth.js.map

@@ -1,7 +1,10 @@
-import { adminUserService } from "../services/index";
-export const registerAdminUser = async (req, res) => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getAdminRolesAndPermissions = exports.deleteAdminUser = exports.updateAdminUserById = exports.getAdminUserById = exports.getAllAdminUsers = exports.changeAdminPassword = exports.updateAdminProfile = exports.getAdminProfile = exports.loginAdminUser = exports.registerAdminUser = void 0;
+const index_1 = require("../services/index");
+const registerAdminUser = async (req, res) => {
     try {
-        const result = await adminUserService.createAdminUser(req.body);
+        const result = await index_1.adminUserService.createAdminUser(req.body);
         res.status(201).json({
             success: true,
             message: "Admin user created successfully",
@@ -29,10 +32,11 @@ export const registerAdminUser = async (req, res) => {
         });
     }
 };
-export const loginAdminUser = async (req, res) => {
+exports.registerAdminUser = registerAdminUser;
+const loginAdminUser = async (req, res) => {
     try {
         const { email, password } = req.body;
-        const result = await adminUserService.loginAdminUser(email, password);
+        const result = await index_1.adminUserService.loginAdminUser(email, password);
         res.status(200).json({
             success: true,
             message: "Admin user logged in successfully",
@@ -61,10 +65,11 @@ export const loginAdminUser = async (req, res) => {
         });
     }
 };
-export const getAdminProfile = async (req, res) => {
+exports.loginAdminUser = loginAdminUser;
+const getAdminProfile = async (req, res) => {
     try {
         const userId = req.user.id;
-        const adminUser = await adminUserService.getAdminUserById(userId);
+        const adminUser = await index_1.adminUserService.getAdminUserById(userId);
         res.status(200).json({
             success: true,
             message: "Admin user profile retrieved successfully",
@@ -94,12 +99,13 @@ export const getAdminProfile = async (req, res) => {
         });
     }
 };
-export const updateAdminProfile = async (req, res) => {
+exports.getAdminProfile = getAdminProfile;
+const updateAdminProfile = async (req, res) => {
     try {
         const userId = req.user.id;
         const updateData = req.body;
         const file = req.file;
-        const adminUser = await adminUserService.updateAdminUser(userId, updateData, file);
+        const adminUser = await index_1.adminUserService.updateAdminUser(userId, updateData, file);
         res.status(200).json({
             success: true,
             message: "Admin user profile updated successfully",
@@ -129,11 +135,12 @@ export const updateAdminProfile = async (req, res) => {
         });
     }
 };
-export const changeAdminPassword = async (req, res) => {
+exports.updateAdminProfile = updateAdminProfile;
+const changeAdminPassword = async (req, res) => {
     try {
         const userId = req.user.id;
         const { currentPassword, newPassword } = req.body;
-        await adminUserService.updateAdminUserPassword(userId, currentPassword, newPassword);
+        await index_1.adminUserService.updateAdminUserPassword(userId, currentPassword, newPassword);
         res.status(200).json({
             success: true,
             message: "Password changed successfully",
@@ -146,7 +153,8 @@ export const changeAdminPassword = async (req, res) => {
         });
     }
 };
-export const getAllAdminUsers = async (req, res) => {
+exports.changeAdminPassword = changeAdminPassword;
+const getAllAdminUsers = async (req, res) => {
     try {
         const query = {
             page: req.query.page ? parseInt(req.query.page) : undefined,
@@ -155,7 +163,7 @@ export const getAllAdminUsers = async (req, res) => {
             department: req.query.department,
             search: req.query.search,
         };
-        const result = await adminUserService.getAllAdminUsers(query);
+        const result = await index_1.adminUserService.getAllAdminUsers(query);
         res.status(200).json({
             success: true,
             message: "Admin users retrieved successfully",
@@ -186,10 +194,11 @@ export const getAllAdminUsers = async (req, res) => {
         });
     }
 };
-export const getAdminUserById = async (req, res) => {
+exports.getAllAdminUsers = getAllAdminUsers;
+const getAdminUserById = async (req, res) => {
     try {
         const { id } = req.params;
-        const adminUser = await adminUserService.getAdminUserById(id);
+        const adminUser = await index_1.adminUserService.getAdminUserById(id);
         res.status(200).json({
             success: true,
             message: "Admin user retrieved successfully",
@@ -219,11 +228,12 @@ export const getAdminUserById = async (req, res) => {
         });
     }
 };
-export const updateAdminUserById = async (req, res) => {
+exports.getAdminUserById = getAdminUserById;
+const updateAdminUserById = async (req, res) => {
     try {
         const { id } = req.params;
         const updateData = req.body;
-        const adminUser = await adminUserService.updateAdminUser(id, updateData);
+        const adminUser = await index_1.adminUserService.updateAdminUser(id, updateData);
         res.status(200).json({
             success: true,
             message: "Admin user updated successfully",
@@ -253,10 +263,11 @@ export const updateAdminUserById = async (req, res) => {
         });
     }
 };
-export const deleteAdminUser = async (req, res) => {
+exports.updateAdminUserById = updateAdminUserById;
+const deleteAdminUser = async (req, res) => {
     try {
         const { id } = req.params;
-        const adminUser = await adminUserService.deleteAdminUser(id);
+        const adminUser = await index_1.adminUserService.deleteAdminUser(id);
         res.status(200).json({
             success: true,
             message: "Admin user deactivated successfully",
@@ -278,9 +289,10 @@ export const deleteAdminUser = async (req, res) => {
         });
     }
 };
-export const getAdminRolesAndPermissions = async (req, res) => {
+exports.deleteAdminUser = deleteAdminUser;
+const getAdminRolesAndPermissions = async (req, res) => {
     try {
-        const result = await adminUserService.getAdminRolesAndPermissions();
+        const result = await index_1.adminUserService.getAdminRolesAndPermissions();
         res.status(200).json({
             success: true,
             message: "Admin roles and permissions retrieved successfully",
@@ -294,4 +306,5 @@ export const getAdminRolesAndPermissions = async (req, res) => {
         });
     }
 };
+exports.getAdminRolesAndPermissions = getAdminRolesAndPermissions;
 //# sourceMappingURL=adminController.js.map

@@ -1,23 +1,29 @@
-import MobileUser from '../models/mobileUser';
-import { generateToken } from '../utils/index';
-import { emailService } from './index';
-import { uploadImage, deleteImage, extractPublicIdFromUrl } from './imageService';
-import { MobileUserStatus } from '../types/mobileTypes';
-export class MobileUserService {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MobileUserService = void 0;
+const mobileUser_1 = __importDefault(require("../models/mobileUser"));
+const index_1 = require("../utils/index");
+const index_2 = require("./index");
+const imageService_1 = require("./imageService");
+const mobileTypes_1 = require("../types/mobileTypes");
+class MobileUserService {
     async createMobileUser(data) {
-        const existingUser = await MobileUser.findOne({ email: data.email });
+        const existingUser = await mobileUser_1.default.findOne({ email: data.email });
         if (existingUser) {
             throw new Error('User with this email already exists');
         }
-        const mobileUser = new MobileUser({
+        const mobileUser = new mobileUser_1.default({
             fullName: data.fullName,
             email: data.email,
             password: data.password,
-            status: MobileUserStatus.PENDING
+            status: mobileTypes_1.MobileUserStatus.PENDING
         });
         const verificationCode = mobileUser.generateEmailVerificationCode();
         await mobileUser.save();
-        const emailSent = await emailService.sendEmailVerification({
+        const emailSent = await index_2.emailService.sendEmailVerification({
             fullName: data.fullName,
             verificationCode: verificationCode
         }, data.email);
@@ -27,7 +33,7 @@ export class MobileUserService {
         return { user: mobileUser };
     }
     async verifyEmail(data) {
-        const mobileUser = await MobileUser.findOne({
+        const mobileUser = await mobileUser_1.default.findOne({
             emailVerificationCode: data.code,
             emailVerificationExpires: { $gt: new Date() }
         }).select('+emailVerificationCode +emailVerificationExpires');
@@ -38,18 +44,18 @@ export class MobileUserService {
             throw new Error('Email is already verified');
         }
         mobileUser.isEmailVerified = true;
-        mobileUser.status = MobileUserStatus.ACTIVE;
+        mobileUser.status = mobileTypes_1.MobileUserStatus.ACTIVE;
         mobileUser.emailVerificationCode = undefined;
         mobileUser.emailVerificationExpires = undefined;
         await mobileUser.save();
-        const token = generateToken(mobileUser._id.toString());
+        const token = (0, index_1.generateToken)(mobileUser._id.toString());
         return {
             user: mobileUser,
             token
         };
     }
     async resendVerificationCode(email) {
-        const mobileUser = await MobileUser.findOne({ email }).select('+emailVerificationCode +emailVerificationExpires');
+        const mobileUser = await mobileUser_1.default.findOne({ email }).select('+emailVerificationCode +emailVerificationExpires');
         if (!mobileUser) {
             throw new Error('User not found');
         }
@@ -58,7 +64,7 @@ export class MobileUserService {
         }
         const verificationCode = mobileUser.generateEmailVerificationCode();
         await mobileUser.save();
-        const emailSent = await emailService.sendEmailVerification({
+        const emailSent = await index_2.emailService.sendEmailVerification({
             fullName: mobileUser.fullName,
             verificationCode: verificationCode
         }, email);
@@ -68,7 +74,7 @@ export class MobileUserService {
         return { email: mobileUser.email };
     }
     async loginMobileUser(email, password) {
-        const mobileUser = await MobileUser.findOne({ email }).select('+password');
+        const mobileUser = await mobileUser_1.default.findOne({ email }).select('+password');
         if (!mobileUser) {
             throw new Error('Invalid email or password');
         }
@@ -81,32 +87,32 @@ export class MobileUserService {
         }
         mobileUser.lastLogin = new Date();
         await mobileUser.save();
-        const token = generateToken(mobileUser._id.toString());
+        const token = (0, index_1.generateToken)(mobileUser._id.toString());
         return {
             user: mobileUser,
             token
         };
     }
     async getMobileUserById(id) {
-        const mobileUser = await MobileUser.findById(id).select('-password -emailVerificationCode -emailVerificationExpires');
+        const mobileUser = await mobileUser_1.default.findById(id).select('-password -emailVerificationCode -emailVerificationExpires');
         if (!mobileUser) {
             throw new Error('Mobile user not found');
         }
         return mobileUser;
     }
     async updateMobileUser(id, data, file) {
-        const mobileUser = await MobileUser.findById(id);
+        const mobileUser = await mobileUser_1.default.findById(id);
         if (!mobileUser) {
             throw new Error('Mobile user not found');
         }
         if (file) {
             if (mobileUser.profileImage) {
-                const oldPublicId = extractPublicIdFromUrl(mobileUser.profileImage);
+                const oldPublicId = (0, imageService_1.extractPublicIdFromUrl)(mobileUser.profileImage);
                 if (oldPublicId) {
-                    await deleteImage(oldPublicId);
+                    await (0, imageService_1.deleteImage)(oldPublicId);
                 }
             }
-            const uploadResult = await uploadImage(file, 'mobile-profiles');
+            const uploadResult = await (0, imageService_1.uploadImage)(file, 'mobile-profiles');
             if (uploadResult.success && uploadResult.url) {
                 data.profileImage = uploadResult.url;
             }
@@ -114,11 +120,11 @@ export class MobileUserService {
                 throw new Error(uploadResult.error || 'Failed to upload profile image');
             }
         }
-        const updatedMobileUser = await MobileUser.findByIdAndUpdate(id, data, { new: true, runValidators: true });
+        const updatedMobileUser = await mobileUser_1.default.findByIdAndUpdate(id, data, { new: true, runValidators: true });
         return updatedMobileUser;
     }
     async updateMobileUserPassword(id, currentPassword, newPassword) {
-        const mobileUser = await MobileUser.findById(id).select('+password');
+        const mobileUser = await mobileUser_1.default.findById(id).select('+password');
         if (!mobileUser) {
             throw new Error('Mobile user not found');
         }
@@ -130,7 +136,7 @@ export class MobileUserService {
         await mobileUser.save();
     }
     async updateMobileUserStatus(id, status) {
-        const mobileUser = await MobileUser.findByIdAndUpdate(id, { status }, { new: true, runValidators: true }).select('-password -emailVerificationCode -emailVerificationExpires');
+        const mobileUser = await mobileUser_1.default.findByIdAndUpdate(id, { status }, { new: true, runValidators: true }).select('-password -emailVerificationCode -emailVerificationExpires');
         if (!mobileUser) {
             throw new Error('Mobile user not found');
         }
@@ -153,12 +159,12 @@ export class MobileUserService {
             ];
         }
         const skip = (page - 1) * limit;
-        const mobileUsers = await MobileUser.find(dbQuery)
+        const mobileUsers = await mobileUser_1.default.find(dbQuery)
             .select('-password -emailVerificationCode -emailVerificationExpires')
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit);
-        const total = await MobileUser.countDocuments(dbQuery);
+        const total = await mobileUser_1.default.countDocuments(dbQuery);
         return {
             users: mobileUsers,
             pagination: {
@@ -170,5 +176,6 @@ export class MobileUserService {
         };
     }
 }
-export default new MobileUserService();
+exports.MobileUserService = MobileUserService;
+exports.default = new MobileUserService();
 //# sourceMappingURL=mobileService.js.map

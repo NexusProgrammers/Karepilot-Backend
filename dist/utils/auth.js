@@ -1,34 +1,45 @@
-import jwt from 'jsonwebtoken';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.validate = exports.refreshToken = exports.isTokenExpired = exports.extractUserIdFromToken = exports.verifyToken = exports.generateToken = void 0;
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
-export const generateToken = (userId) => {
-    return jwt.sign({ userId }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+const generateToken = (userId) => {
+    return jsonwebtoken_1.default.sign({ userId }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 };
-export const verifyToken = (token) => {
-    return jwt.verify(token, JWT_SECRET);
+exports.generateToken = generateToken;
+const verifyToken = (token) => {
+    return jsonwebtoken_1.default.verify(token, JWT_SECRET);
 };
-export const extractUserIdFromToken = (token) => {
+exports.verifyToken = verifyToken;
+const extractUserIdFromToken = (token) => {
     try {
-        const decoded = verifyToken(token);
+        const decoded = (0, exports.verifyToken)(token);
         return decoded.userId;
     }
     catch (error) {
         return null;
     }
 };
-export const isTokenExpired = (token) => {
+exports.extractUserIdFromToken = extractUserIdFromToken;
+const isTokenExpired = (token) => {
     try {
-        jwt.verify(token, JWT_SECRET);
+        jsonwebtoken_1.default.verify(token, JWT_SECRET);
         return false;
     }
     catch (error) {
         return error.name === 'TokenExpiredError';
     }
 };
-export const refreshToken = (userId) => {
-    return generateToken(userId);
+exports.isTokenExpired = isTokenExpired;
+const refreshToken = (userId) => {
+    return (0, exports.generateToken)(userId);
 };
-export const validate = (schema, source = 'body') => {
+exports.refreshToken = refreshToken;
+const validate = (schema, source = 'body') => {
     return (req, res, next) => {
         const data = req[source];
         const { error, value } = schema.validate(data, {
@@ -48,4 +59,5 @@ export const validate = (schema, source = 'body') => {
         next();
     };
 };
+exports.validate = validate;
 //# sourceMappingURL=auth.js.map

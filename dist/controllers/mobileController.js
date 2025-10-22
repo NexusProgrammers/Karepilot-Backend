@@ -1,7 +1,10 @@
-import { mobileUserService } from "../services/index";
-export const registerMobileUser = async (req, res) => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateMobileUserStatus = exports.getMobileUserById = exports.getAllMobileUsers = exports.changeMobilePassword = exports.updateMobileProfile = exports.getMobileProfile = exports.loginMobileUser = exports.resendVerificationCode = exports.verifyEmail = exports.registerMobileUser = void 0;
+const index_1 = require("../services/index");
+const registerMobileUser = async (req, res) => {
     try {
-        const result = await mobileUserService.createMobileUser(req.body);
+        const result = await index_1.mobileUserService.createMobileUser(req.body);
         res.status(201).json({
             success: true,
             message: "Mobile user registered successfully. Please verify your email.",
@@ -24,10 +27,11 @@ export const registerMobileUser = async (req, res) => {
         });
     }
 };
-export const verifyEmail = async (req, res) => {
+exports.registerMobileUser = registerMobileUser;
+const verifyEmail = async (req, res) => {
     try {
         const { code } = req.body;
-        const result = await mobileUserService.verifyEmail({ code });
+        const result = await index_1.mobileUserService.verifyEmail({ code });
         res.status(200).json({
             success: true,
             message: "Email verified successfully",
@@ -52,10 +56,11 @@ export const verifyEmail = async (req, res) => {
         });
     }
 };
-export const resendVerificationCode = async (req, res) => {
+exports.verifyEmail = verifyEmail;
+const resendVerificationCode = async (req, res) => {
     try {
         const { email } = req.body;
-        const result = await mobileUserService.resendVerificationCode(email);
+        const result = await index_1.mobileUserService.resendVerificationCode(email);
         res.status(200).json({
             success: true,
             message: "Verification code resent successfully",
@@ -69,10 +74,11 @@ export const resendVerificationCode = async (req, res) => {
         });
     }
 };
-export const loginMobileUser = async (req, res) => {
+exports.resendVerificationCode = resendVerificationCode;
+const loginMobileUser = async (req, res) => {
     try {
         const { email, password } = req.body;
-        const result = await mobileUserService.loginMobileUser(email, password);
+        const result = await index_1.mobileUserService.loginMobileUser(email, password);
         res.status(200).json({
             success: true,
             message: "Mobile user logged in successfully",
@@ -98,10 +104,11 @@ export const loginMobileUser = async (req, res) => {
         });
     }
 };
-export const getMobileProfile = async (req, res) => {
+exports.loginMobileUser = loginMobileUser;
+const getMobileProfile = async (req, res) => {
     try {
         const userId = req.user.id;
-        const mobileUser = await mobileUserService.getMobileUserById(userId);
+        const mobileUser = await index_1.mobileUserService.getMobileUserById(userId);
         res.status(200).json({
             success: true,
             message: "Mobile user profile retrieved successfully",
@@ -126,12 +133,13 @@ export const getMobileProfile = async (req, res) => {
         });
     }
 };
-export const updateMobileProfile = async (req, res) => {
+exports.getMobileProfile = getMobileProfile;
+const updateMobileProfile = async (req, res) => {
     try {
         const userId = req.user.id;
         const updateData = req.body;
         const file = req.file;
-        const mobileUser = await mobileUserService.updateMobileUser(userId, updateData, file);
+        const mobileUser = await index_1.mobileUserService.updateMobileUser(userId, updateData, file);
         res.status(200).json({
             success: true,
             message: "Mobile user profile updated successfully",
@@ -157,11 +165,12 @@ export const updateMobileProfile = async (req, res) => {
         });
     }
 };
-export const changeMobilePassword = async (req, res) => {
+exports.updateMobileProfile = updateMobileProfile;
+const changeMobilePassword = async (req, res) => {
     try {
         const userId = req.user.id;
         const { currentPassword, newPassword } = req.body;
-        await mobileUserService.updateMobileUserPassword(userId, currentPassword, newPassword);
+        await index_1.mobileUserService.updateMobileUserPassword(userId, currentPassword, newPassword);
         res.status(200).json({
             success: true,
             message: "Password changed successfully",
@@ -174,7 +183,8 @@ export const changeMobilePassword = async (req, res) => {
         });
     }
 };
-export const getAllMobileUsers = async (req, res) => {
+exports.changeMobilePassword = changeMobilePassword;
+const getAllMobileUsers = async (req, res) => {
     try {
         const query = {
             page: req.query.page ? parseInt(req.query.page) : undefined,
@@ -183,7 +193,7 @@ export const getAllMobileUsers = async (req, res) => {
             isEmailVerified: req.query.isEmailVerified ? req.query.isEmailVerified === "true" : undefined,
             search: req.query.search,
         };
-        const result = await mobileUserService.getAllMobileUsers(query);
+        const result = await index_1.mobileUserService.getAllMobileUsers(query);
         res.status(200).json({
             success: true,
             message: "Mobile users retrieved successfully",
@@ -209,10 +219,11 @@ export const getAllMobileUsers = async (req, res) => {
         });
     }
 };
-export const getMobileUserById = async (req, res) => {
+exports.getAllMobileUsers = getAllMobileUsers;
+const getMobileUserById = async (req, res) => {
     try {
         const { id } = req.params;
-        const mobileUser = await mobileUserService.getMobileUserById(id);
+        const mobileUser = await index_1.mobileUserService.getMobileUserById(id);
         res.status(200).json({
             success: true,
             message: "Mobile user retrieved successfully",
@@ -237,11 +248,12 @@ export const getMobileUserById = async (req, res) => {
         });
     }
 };
-export const updateMobileUserStatus = async (req, res) => {
+exports.getMobileUserById = getMobileUserById;
+const updateMobileUserStatus = async (req, res) => {
     try {
         const { id } = req.params;
         const { status } = req.body;
-        const mobileUser = await mobileUserService.updateMobileUserStatus(id, status);
+        const mobileUser = await index_1.mobileUserService.updateMobileUserStatus(id, status);
         res.status(200).json({
             success: true,
             message: "Mobile user status updated successfully",
@@ -266,4 +278,5 @@ export const updateMobileUserStatus = async (req, res) => {
         });
     }
 };
+exports.updateMobileUserStatus = updateMobileUserStatus;
 //# sourceMappingURL=mobileController.js.map

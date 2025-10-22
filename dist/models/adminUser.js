@@ -1,6 +1,42 @@
-import mongoose, { Schema } from "mongoose";
-import * as bcrypt from "bcryptjs";
-export var Permission;
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ROLE_PERMISSIONS = exports.AdminRole = exports.Permission = void 0;
+const mongoose_1 = __importStar(require("mongoose"));
+const bcrypt = __importStar(require("bcryptjs"));
+var Permission;
 (function (Permission) {
     Permission["VIEW_ALL"] = "View All";
     Permission["EDIT_ALL"] = "Edit All";
@@ -13,8 +49,8 @@ export var Permission;
     Permission["EDIT_USERS"] = "Edit Users";
     Permission["MANAGE_INVENTORY"] = "Manage Inventory";
     Permission["DELETE_USERS"] = "Delete Users";
-})(Permission || (Permission = {}));
-export var AdminRole;
+})(Permission || (exports.Permission = Permission = {}));
+var AdminRole;
 (function (AdminRole) {
     AdminRole["ADMIN"] = "Admin";
     AdminRole["MANAGER"] = "Manager";
@@ -22,8 +58,8 @@ export var AdminRole;
     AdminRole["STAFF"] = "Staff";
     AdminRole["SECURITY"] = "Security";
     AdminRole["VIEWER"] = "Viewer";
-})(AdminRole || (AdminRole = {}));
-export const ROLE_PERMISSIONS = {
+})(AdminRole || (exports.AdminRole = AdminRole = {}));
+exports.ROLE_PERMISSIONS = {
     [AdminRole.ADMIN]: [
         Permission.VIEW_ALL,
         Permission.EDIT_ALL,
@@ -62,7 +98,7 @@ export const ROLE_PERMISSIONS = {
     ],
     [AdminRole.VIEWER]: [Permission.VIEW_BASIC],
 };
-const adminUserSchema = new Schema({
+const adminUserSchema = new mongoose_1.Schema({
     name: {
         type: String,
         required: [true, "Name is required"],
@@ -141,7 +177,7 @@ adminUserSchema.pre("save", async function (next) {
     try {
         const salt = await bcrypt.genSalt(12);
         this.password = await bcrypt.hash(this.password, salt);
-        this.permissions = ROLE_PERMISSIONS[this.role] || [];
+        this.permissions = exports.ROLE_PERMISSIONS[this.role] || [];
         next();
     }
     catch (error) {
@@ -160,7 +196,7 @@ adminUserSchema.pre(["updateOne", "findOneAndUpdate"], async function (next) {
         }
     }
     if (update?.role) {
-        update.permissions = ROLE_PERMISSIONS[update.role] || [];
+        update.permissions = exports.ROLE_PERMISSIONS[update.role] || [];
     }
     next();
 });
@@ -182,6 +218,6 @@ adminUserSchema.statics.findByRole = function (role) {
 adminUserSchema.statics.findByPermission = function (permission) {
     return this.find({ permissions: permission, isActive: true });
 };
-const AdminUser = mongoose.model("AdminUser", adminUserSchema);
-export default AdminUser;
+const AdminUser = mongoose_1.default.model("AdminUser", adminUserSchema);
+exports.default = AdminUser;
 //# sourceMappingURL=adminUser.js.map

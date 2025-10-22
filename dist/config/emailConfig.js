@@ -1,4 +1,7 @@
-export const emailConfig = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.validateEmailConfig = exports.emailConfig = void 0;
+exports.emailConfig = {
     gmail: {
         user: process.env.GMAIL_USER,
         appPassword: process.env.GMAIL_APP_PASSWORD
@@ -18,11 +21,12 @@ export const emailConfig = {
         }
     }
 };
-export const validateEmailConfig = () => {
-    if (!emailConfig.gmail.user || !emailConfig.gmail.appPassword) {
+const validateEmailConfig = () => {
+    if (!exports.emailConfig.gmail.user || !exports.emailConfig.gmail.appPassword) {
         console.error('Email configuration is missing. Please set GMAIL_USER and GMAIL_APP_PASSWORD environment variables.');
         return false;
     }
     return true;
 };
+exports.validateEmailConfig = validateEmailConfig;
 //# sourceMappingURL=emailConfig.js.map
