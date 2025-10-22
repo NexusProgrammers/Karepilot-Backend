@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import bcrypt from "bcryptjs";
+import * as bcrypt from "bcryptjs";
 export var Permission;
 (function (Permission) {
     Permission["VIEW_ALL"] = "View All";
