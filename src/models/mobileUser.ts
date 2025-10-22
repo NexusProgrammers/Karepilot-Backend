@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import bcrypt from "bcryptjs";
+import * as bcrypt from "bcryptjs";
 import { IMobileUser, MobileUserStatus } from "../types/mobileTypes";
 
 const mobileUserSchema = new Schema<IMobileUser>(
@@ -71,7 +71,6 @@ mobileUserSchema.index({ isEmailVerified: 1 });
 
 mobileUserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
-
   try {
     const salt = await bcrypt.genSalt(12);
     this.password = await bcrypt.hash(this.password, salt);
