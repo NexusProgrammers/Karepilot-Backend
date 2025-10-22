@@ -4,6 +4,9 @@
   "description": "",
   "main": "dist/app.js",
   "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "build": "tsc",
     "start": "node dist/app.js",
@@ -11,7 +14,18 @@
     "dev:nodemon": "nodemon --exec tsx src/app.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "mobile-app",
+    "backend",
+    "express",
+    "mongodb",
+    "api",
+    "restful",
+    "server",
+    "scalable",
+    "robust",
+    "production-ready"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
