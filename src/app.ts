@@ -30,6 +30,7 @@ app.get("/", (req: Request, res: Response) => {
 dbConnect();
 
 app.use("/api/v1", mainRouter);
+
 app.use((req: Request, res: Response, next: NextFunction) => {
   const error = new Error("Not Found");
   next(error);
