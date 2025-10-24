@@ -77,16 +77,6 @@ export const adminUserUpdateSchema = Joi.object({
   isActive: Joi.boolean().optional()
 });
 
-export const adminPasswordChangeSchema = Joi.object({
-  currentPassword: Joi.string().required().messages({
-    'any.required': 'Current password is required'
-  }),
-  newPassword: passwordSchema.messages({
-    'string.min': 'New password must be at least 6 characters long',
-    'any.required': 'New password is required'
-  })
-});
-
 export const adminUserQuerySchema = Joi.object({
   page: Joi.number().integer().min(1).optional().default(1),
   limit: Joi.number().integer().min(1).max(100).optional().default(10),

@@ -138,25 +138,6 @@ export const updateAdminProfile = async (req: Request, res: Response): Promise<v
   }
 };
 
-export const changeAdminPassword = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const userId = (req as any).user.id;
-    const { currentPassword, newPassword } = req.body;
-
-    await adminUserService.updateAdminUserPassword(userId, currentPassword, newPassword);
-
-    res.status(200).json({
-      success: true,
-      message: "Password changed successfully",
-    });
-  } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message || "Error changing password",
-    });
-  }
-};
-
 export const getAllAdminUsers = async (req: Request, res: Response): Promise<void> => {
   try {
     const query = {

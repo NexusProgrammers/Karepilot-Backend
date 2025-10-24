@@ -98,25 +98,6 @@ export class AdminUserService {
     return updatedAdminUser!;
   }
 
-  async updateAdminUserPassword(
-    id: string,
-    currentPassword: string,
-    newPassword: string,
-  ): Promise<void> {
-    const adminUser = await AdminUser.findById(id).select("+password");
-    if (!adminUser) {
-      throw new Error("Admin user not found");
-    }
-
-    const isCurrentPasswordValid = await adminUser.comparePassword(currentPassword);
-    if (!isCurrentPasswordValid) {
-      throw new Error("Current password is incorrect");
-    }
-
-    adminUser.password = newPassword;
-    await adminUser.save();
-  }
-
   async deleteAdminUser(id: string): Promise<IAdminUser> {
     const adminUser = await AdminUser.findByIdAndUpdate(
       id,

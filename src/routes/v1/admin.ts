@@ -4,7 +4,6 @@ import {
   loginAdminUser,
   getAdminProfile,
   updateAdminProfile,
-  changeAdminPassword,
   getAllAdminUsers,
   getAdminUserById,
   updateAdminUserById,
@@ -21,12 +20,12 @@ import {
   adminUserRegistrationSchema,
   adminUserLoginSchema,
   adminUserUpdateSchema,
-  adminPasswordChangeSchema,
   adminUserQuerySchema,
   adminUserIdParamSchema,
 } from "../../validations/adminUserSchemas";
 import { Permission } from "../../models/adminUser";
 import { validate } from "../../utils";
+import adminSettingsRouter from "./adminSettings";
 
 const adminRouter = Router();
 
@@ -38,7 +37,6 @@ adminRouter.use(authenticateAdmin);
 
 adminRouter.get("/profile", getAdminProfile);
 adminRouter.put("/profile", uploadSingleImage, validate(adminUserUpdateSchema), updateAdminProfile);
-adminRouter.put("/change-password", validate(adminPasswordChangeSchema), changeAdminPassword);
 
 adminRouter.get(
   "/users",
@@ -68,5 +66,7 @@ adminRouter.delete(
   requirePermission(Permission.DELETE_USERS),
   deleteAdminUser,
 );
+
+adminRouter.use("/settings", adminSettingsRouter);
 
 export default adminRouter;
