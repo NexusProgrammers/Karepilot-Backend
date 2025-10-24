@@ -15,7 +15,6 @@ import {
   authenticateAdmin,
   requirePermission,
   requireAnyPermission,
-  requireRole,
 } from "../../middlewares/auth";
 import { uploadSingleImage } from "../../middlewares/upload";
 import {
