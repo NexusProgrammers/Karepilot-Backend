@@ -140,9 +140,8 @@ export const updateMobileProfile = async (req: Request, res: Response): Promise<
   try {
     const userId = (req as any).user.id;
     const updateData = req.body;
-    const file = req.file;
 
-    const mobileUser = await mobileUserService.updateMobileUser(userId, updateData, file);
+    const mobileUser = await mobileUserService.updateMobileUser(userId, updateData);
 
     res.status(200).json({
       success: true,

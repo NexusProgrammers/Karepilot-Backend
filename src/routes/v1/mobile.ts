@@ -9,7 +9,6 @@ import {
   changeMobilePassword,
 } from "../../controllers/mobileController";
 import { authenticateMobile } from "../../middlewares/auth";
-import { uploadSingleImage } from "../../middlewares/upload";
 import {
   mobileUserRegistrationSchema,
   mobileUserLoginSchema,
@@ -38,7 +37,7 @@ mobileRouter.use(authenticateMobile);
 
 mobileRouter.get("/profile", getMobileProfile);
 
-mobileRouter.patch("/profile", uploadSingleImage, validate(mobileUserUpdateSchema), updateMobileProfile);
+mobileRouter.patch("/profile", validate(mobileUserUpdateSchema), updateMobileProfile);
 
 mobileRouter.put("/change-password", validate(mobilePasswordChangeSchema), changeMobilePassword);
 

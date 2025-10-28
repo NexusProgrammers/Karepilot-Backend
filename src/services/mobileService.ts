@@ -141,26 +141,16 @@ export class MobileUserService {
   async updateMobileUser(
     id: string,
     data: UpdateMobileUserData,
-    file?: Express.Multer.File,
   ): Promise<IMobileUser> {
     const mobileUser = await MobileUser.findById(id);
     if (!mobileUser) {
       throw new Error("Mobile user not found");
     }
 
-    if (file) {
-      if (mobileUser.profileImage) {
-        const oldPublicId = extractPublicIdFromUrl(mobileUser.profileImage);
-        if (oldPublicId) {
-          await deleteImage(oldPublicId);
-        }
-      }
-
-      const uploadResult = await uploadImage(file, "mobile-profiles");
-      if (uploadResult.success && uploadResult.url) {
-        data.profileImage = uploadResult.url;
-      } else {
-        throw new Error(uploadResult.error || "Failed to upload profile image");
+    if (data.profileImage && mobileUser.profileImage) {
+      const oldPublicId = extractPublicIdFromUrl(mobileUser.profileImage);
+      if (oldPublicId) {
+        await deleteImage(oldPublicId);
       }
     }
 

@@ -67,6 +67,12 @@ export const mobileUserUpdateSchema = Joi.object({
     .optional()
     .messages({
       'string.email': 'Please provide a valid email address'
+    }),
+  profileImage: Joi.string()
+    .uri()
+    .optional()
+    .messages({
+      'string.uri': 'Profile image must be a valid URL'
     })
 });
 

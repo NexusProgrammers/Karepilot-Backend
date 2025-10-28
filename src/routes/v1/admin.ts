@@ -30,12 +30,15 @@ import adminSettingsRouter from "./adminSettings";
 const adminRouter = Router();
 
 adminRouter.post("/register", validate(adminUserRegistrationSchema), registerAdminUser);
+
 adminRouter.post("/login", validate(adminUserLoginSchema), loginAdminUser);
+
 adminRouter.get("/roles-permissions", getAdminRolesAndPermissions);
 
 adminRouter.use(authenticateAdmin);
 
 adminRouter.get("/profile", getAdminProfile);
+
 adminRouter.put("/profile", uploadSingleImage, validate(adminUserUpdateSchema), updateAdminProfile);
 
 adminRouter.get(

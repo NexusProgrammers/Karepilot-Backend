@@ -32,9 +32,9 @@ export interface CreateMobileUserData {
 }
 
 export interface UpdateMobileUserData {
-  profileImage: string;
   fullName?: string;
   email?: string;
+  profileImage?: string;
 }
 
 export interface MobileUserResult {
