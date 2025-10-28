@@ -37,27 +37,9 @@ export interface UpdateMobileUserData {
   email?: string;
 }
 
-export interface MobileUserQuery {
-  page?: number | undefined;
-  limit?: number | undefined;
-  status?: MobileUserStatus | undefined;
-  isEmailVerified?: boolean | undefined;
-  search?: string | undefined;
-}
-
 export interface MobileUserResult {
   user: IMobileUser;
   token?: string;
-}
-
-export interface MobileUsersListResult {
-  users: IMobileUser[];
-  pagination: {
-    current: number;
-    pages: number;
-    total: number;
-    limit: number;
-  };
 }
 
 export interface EmailVerificationData {

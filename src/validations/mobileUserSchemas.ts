@@ -104,17 +104,3 @@ export const resendVerificationSchema = Joi.object({
   email: emailSchema
 });
 
-export const mobileUserQuerySchema = Joi.object({
-  page: Joi.number().integer().min(1).optional().default(1),
-  limit: Joi.number().integer().min(1).max(100).optional().default(10),
-  status: Joi.string().valid(...Object.values(MobileUserStatus)).optional(),
-  isEmailVerified: Joi.boolean().optional(),
-  search: Joi.string().trim().optional()
-});
-
-export const mobileUserIdParamSchema = Joi.object({
-  id: Joi.string().pattern(/^[0-9a-fA-F]{24}$/).required().messages({
-    'string.pattern.base': 'Invalid mobile user ID format'
-  })
-});
-
