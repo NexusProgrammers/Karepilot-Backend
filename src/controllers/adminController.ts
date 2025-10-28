@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { adminUserService } from "../services/index";
-import { uploadSingleImage } from "../middlewares/upload";
 
 export const registerAdminUser = async (req: Request, res: Response): Promise<void> => {
   try {
