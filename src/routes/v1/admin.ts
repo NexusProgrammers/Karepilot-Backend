@@ -15,7 +15,6 @@ import {
   requirePermission,
   requireAnyPermission,
 } from "../../middlewares/auth";
-import { uploadSingleImage } from "../../middlewares/upload";
 import {
   adminUserRegistrationSchema,
   adminUserLoginSchema,
@@ -39,7 +38,7 @@ adminRouter.use(authenticateAdmin);
 
 adminRouter.get("/profile", getAdminProfile);
 
-adminRouter.put("/profile", uploadSingleImage, validate(adminUserUpdateSchema), updateAdminProfile);
+adminRouter.put("/profile", validate(adminUserUpdateSchema), updateAdminProfile);
 
 adminRouter.get(
   "/users",

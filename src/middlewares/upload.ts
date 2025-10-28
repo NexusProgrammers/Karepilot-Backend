@@ -39,8 +39,6 @@ const upload = multer({
 });
 
 export const uploadSingleFile = upload.single("file");
-export const uploadMultipleFiles = upload.array("files", 10);
-export const uploadSingleImage = upload.single("profileImage");
-export const uploadMultipleImages = upload.array("images", 20);
+export const uploadMultipleFiles = upload.array("files", 20);
 
 export default upload;
