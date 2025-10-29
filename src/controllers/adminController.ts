@@ -34,9 +34,9 @@ export const registerAdminUser = async (req: Request, res: Response): Promise<vo
 
 export const loginAdminUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { email, password } = req.body;
+    const { email, password, rememberMe = false } = req.body;
 
-    const result = await adminUserService.loginAdminUser(email, password);
+    const result = await adminUserService.loginAdminUser(email, password, rememberMe);
 
     res.status(200).json({
       success: true,

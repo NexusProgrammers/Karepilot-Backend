@@ -38,7 +38,7 @@ export class AdminUserService {
     };
   }
 
-  async loginAdminUser(email: string, password: string): Promise<AdminUserResult> {
+  async loginAdminUser(email: string, password: string, rememberMe: boolean = false): Promise<AdminUserResult> {
     const adminUser = await AdminUser.findOne({ email, isActive: true }).select("+password");
     if (!adminUser) {
       throw new Error("Invalid email or password");
@@ -52,7 +52,7 @@ export class AdminUserService {
     adminUser.lastLogin = new Date();
     await adminUser.save();
 
-    const token = generateToken((adminUser._id as any).toString());
+    const token = generateToken((adminUser._id as any).toString(), rememberMe);
 
     return {
       user: adminUser,

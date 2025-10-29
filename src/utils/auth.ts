@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
 
-export const generateToken = (userId: string): string => {
-  return jwt.sign({ userId }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions);
+export const generateToken = (userId: string, rememberMe: boolean = false): string => {
+  const expiresIn = rememberMe ? '30d' : '7d';
+  return jwt.sign({ userId }, JWT_SECRET, { expiresIn } as jwt.SignOptions);
 };
 
 export const verifyToken = (token: string): any => {
@@ -29,8 +29,8 @@ export const isTokenExpired = (token: string): boolean => {
   }
 };
 
-export const refreshToken = (userId: string): string => {
-  return generateToken(userId);
+export const refreshToken = (userId: string, rememberMe: boolean = false): string => {
+  return generateToken(userId, rememberMe);
 };
 
 export const validate = (schema: any, source: 'body' | 'query' | 'params' = 'body') => {

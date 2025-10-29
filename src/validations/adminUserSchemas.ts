@@ -50,7 +50,8 @@ export const adminUserLoginSchema = Joi.object({
   email: emailSchema,
   password: Joi.string().required().messages({
     'any.required': 'Password is required'
-  })
+  }),
+  rememberMe: Joi.boolean().optional().default(false)
 });
 
 export const adminUserUpdateSchema = Joi.object({
