@@ -14,20 +14,71 @@ config();
 const app = express();
 
 app.use(morgan("dev"));
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://karepilot-frontend.vercel.app",
+  "https://karepilot-frontend.vercel.app/",
+  ...(process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(",").map((url) => url.trim()) : []),
+];
+
+app.use(
+  cors({
+    credentials: true,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        if (
+          origin.includes("localhost") ||
+          origin.includes("127.0.0.1") ||
+          origin.includes("vercel.app")
+        ) {
+          callback(null, true);
+        } else {
+          callback(new Error("Not allowed by CORS"));
+        }
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+    exposedHeaders: ["Set-Cookie"],
+  }),
+);
+
 app.use(express.json({ limit: "50mb" }));
-app.use(cookieParser());
-app.use(helmet());
-app.use(cors({
-  credentials: true,
-  origin: process.env.FRONTEND_URL || "http://localhost:3000"
-}));
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser()); 
+
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+  }),
+);
 app.use(compression());
 app.use(ExpressMongoSanitize());
 
-app.options("*", cors({
-  credentials: true,
-  origin: process.env.FRONTEND_URL || "http://localhost:3000"
-}));
+app.options(
+  "*",
+  cors({
+    credentials: true,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else if (
+        origin.includes("localhost") ||
+        origin.includes("127.0.0.1") ||
+        origin.includes("vercel.app")
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  }),
+);
 
 const port: number = Number(process.env.PORT) || 8000;
 
