@@ -5,6 +5,7 @@ import helmet from "helmet";
 import cors from "cors";
 import compression from "compression";
 import ExpressMongoSanitize from "express-mongo-sanitize";
+import cookieParser from "cookie-parser";
 import dbConnect from "./config/dbConnect";
 import mainRouter from "./routes/v1";
 
@@ -14,12 +15,19 @@ const app = express();
 
 app.use(morgan("dev"));
 app.use(express.json({ limit: "50mb" }));
+app.use(cookieParser());
 app.use(helmet());
-app.use(cors());
+app.use(cors({
+  credentials: true,
+  origin: process.env.FRONTEND_URL || "http://localhost:3000"
+}));
 app.use(compression());
 app.use(ExpressMongoSanitize());
 
-app.options("*", cors());
+app.options("*", cors({
+  credentials: true,
+  origin: process.env.FRONTEND_URL || "http://localhost:3000"
+}));
 
 const port: number = Number(process.env.PORT) || 8000;
 

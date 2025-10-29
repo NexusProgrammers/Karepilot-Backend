@@ -19,7 +19,11 @@ export const authenticateAdmin = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const token = req.header("Authorization")?.replace("Bearer ", "");
+    let token = req.header("Authorization")?.replace("Bearer ", "");
+    
+    if (!token) {
+      token = req.cookies?.["auth-token"] || null;
+    }
 
     if (!token) {
       res.status(401).json({
@@ -58,7 +62,11 @@ export const authenticateMobile = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const token = req.header("Authorization")?.replace("Bearer ", "");
+    let token = req.header("Authorization")?.replace("Bearer ", "");
+    
+    if (!token) {
+      token = req.cookies?.["auth-token"] || null;
+    }
 
     if (!token) {
       res.status(401).json({
@@ -92,7 +100,11 @@ export const authenticateMobile = async (
 
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const token = req.header("Authorization")?.replace("Bearer ", "");
+    let token = req.header("Authorization")?.replace("Bearer ", "");
+    
+    if (!token) {
+      token = req.cookies?.["auth-token"] || null;
+    }
 
     if (!token) {
       return res.status(401).json({
@@ -223,7 +235,11 @@ export const requireRole = (roles: AdminRole[]) => {
 
 export const optionalAuth = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const token = req.header("Authorization")?.replace("Bearer ", "");
+    let token = req.header("Authorization")?.replace("Bearer ", "");
+    
+    if (!token) {
+      token = req.cookies?.["auth-token"] || null;
+    }
 
     if (token) {
       const decoded = verifyToken(token);
