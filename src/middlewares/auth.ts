@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import AdminUser, { IAdminUser, Permission, AdminRole } from "../models/adminUser";
-import MobileUser from "../models/mobileUser";
+import { AdminUser, IAdminUser, Permission, AdminRole } from "../models/admin";
+import { MobileUser } from "../models/mobile";
 import { verifyToken } from "../utils/auth";
-import { IMobileUser } from "../types/mobileTypes";
+import { IMobileUser } from "../types/mobile/mobileTypes";
 
 declare global {
   namespace Express {
