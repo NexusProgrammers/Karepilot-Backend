@@ -35,7 +35,7 @@ export class UploadService {
     return this.allowedMimeTypes[mimetype as keyof typeof this.allowedMimeTypes] || false;
   }
 
-  async uploadFile(
+  async uploadFile( 
     file: Express.Multer.File,
     folder: string = "uploads"
   ): Promise<UploadResult> {

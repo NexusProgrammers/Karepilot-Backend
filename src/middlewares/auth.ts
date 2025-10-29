@@ -41,6 +41,7 @@ export const authenticateAdmin = async (
     }
 
     req.user = user;
+    console.log(user,'usee');
     req.userType = "admin";
     next();
   } catch (error) {

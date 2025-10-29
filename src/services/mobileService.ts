@@ -1,7 +1,7 @@
 import MobileUser from "../models/mobileUser";
 import { generateToken } from "../utils/index";
 import { emailService } from "./index";
-import { uploadImage, deleteImage, extractPublicIdFromUrl } from "./imageService";
+import { deleteImage, extractPublicIdFromUrl } from "./imageService";
 import {
   CreateMobileUserData,
   UpdateMobileUserData,

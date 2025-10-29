@@ -25,7 +25,6 @@ const adminGeneralSettingsSchema = new Schema<IAdminGeneralSettings>(
       required: true,
       unique: true,
     },
-    
     firstName: {
       type: String,
       required: [true, "First name is required"],
