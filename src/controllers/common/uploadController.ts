@@ -54,7 +54,6 @@ export const deleteFile = async (req: Request, res: Response): Promise<void> => 
       return;
     }
 
-    // Decode the publicId in case it contains encoded characters
     const decodedPublicId = decodeURIComponent(publicId);
 
     const result = await uploadService.deleteFile(
